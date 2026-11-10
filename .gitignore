@@ -1,0 +1,11 @@
+# Private settings – never commit these
+public/js/config.js
+firestore.rules
+.firebaserc
+
+# Firebase / tooling
+.firebase/
+*.log
+node_modules/
+.DS_Store
+Thumbs.db

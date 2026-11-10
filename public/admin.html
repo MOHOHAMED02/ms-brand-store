@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MS Brand · Admin</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Tajawal:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="css/admin.css?v=38">
+<link rel="icon" href="img/logo.png">
+</head><body>
+
+<section class="login-wrap" id="loginWrap">
+  <div class="login-art">
+    <img src="img/logo.png" alt="MS Brand Clothing" class="logo-inv">
+    <p>Store dashboard</p>
+  </div>
+  <form class="login" id="login" onsubmit="return false">
+    <img src="img/logo.png" alt="" class="logo-sm">
+    <h1>Welcome back</h1>
+    <p class="muted">Enter your password to see orders.</p>
+    <input type="email" value="" autocomplete="username" hidden>
+    <label for="pw">Password</label>
+    <input id="pw" type="password" required autofocus autocomplete="current-password">
+    <button class="btn">Sign in</button>
+    <p class="err" id="lerr" hidden></p>
+  </form>
+</section>
+
+<div id="app" hidden>
+  <header class="top-bar">
+    <div class="tb-in">
+      <img src="img/logo.png" alt="MS Brand Clothing" class="logo-inv">
+      <div class="hb">
+        <button class="btn-l" id="pwBtn">Change password</button>
+        <button class="btn-l" id="out">Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="title-row">
+      <div><p class="eyebrow" id="greet">Hello</p><h1 id="pageTitle">Orders</h1>
+        <nav class="tabs" id="tabs"><button data-t="orders" class="on">Orders</button><button data-t="products">Products</button><button data-t="cats">Categories</button><button data-t="settings">Covers</button></nav></div>
+      <a class="site-link" href="/" target="_blank" rel="noopener">View store ↗</a>
+    </div>
+
+    <form class="pwbox" id="pwForm" hidden>
+      <h3>Change password</h3>
+      <input id="cur" type="password" placeholder="Current password" required autocomplete="current-password">
+      <input id="np1" type="password" placeholder="New password (min 8)" required minlength="8" autocomplete="new-password">
+      <input id="np2" type="password" placeholder="Repeat new password" required minlength="8" autocomplete="new-password">
+      <div class="hb"><button class="btn">Save</button><button type="button" class="btn ghost" id="pwCancel">Cancel</button></div>
+      <p id="pwMsg" hidden></p>
+    </form>
+
+<section id="ordersTab">
+    <div class="stats" id="stats">
+      <button data-f="all" class="stat on"><span>All</span><b id="c-all">0</b></button>
+      <button data-f="new" class="stat s-new"><span>New</span><b id="c-new">0</b></button>
+      <button data-f="paid" class="stat s-paid"><span>Paid</span><b id="c-paid">0</b></button>
+      <button data-f="sent" class="stat s-sent"><span>Sent</span><b id="c-sent">0</b></button>
+      <button data-f="cancelled" class="stat s-cancelled"><span>Cancelled</span><b id="c-cancelled">0</b></button>
+    </div>
+
+    <div class="summary">
+      <div><small>Today</small><b id="sumToday">0</b><span>new orders today</span></div>
+      <div><small>Waiting</small><b id="sumNew">0</b><span>orders to handle</span></div>
+      <div><small>Pieces</small><b id="sumPieces">0</b><span>items ordered in total</span></div>
+    </div>
+    <div class="search"><input id="search" type="search" placeholder="Search by name, town or phone"></div>
+    <div id="list"></div>
+</section>
+<section id="catsTab" hidden>
+  <p class="muted" style="margin-bottom:16px">Add, rename or remove the categories shown on the store. Changes go live right away.</p>
+  <div class="catcols">
+    <div class="pform"><h3>Summer</h3><div id="cl-summer" class="clist"></div>
+      <form class="cadd" data-s="summer"><input placeholder="New category name" maxlength="30" required><button class="btn">Add</button></form></div>
+    <div class="pform"><h3>Winter</h3><div id="cl-winter" class="clist"></div>
+      <form class="cadd" data-s="winter"><input placeholder="New category name" maxlength="30" required><button class="btn">Add</button></form></div>
+  </div>
+  <p id="cMsg2" hidden></p>
+</section>
+<section id="settingsTab" hidden>
+  <div class="pform">
+    <h3>Cover photo</h3>
+    <p class="muted">The big photo at the top of the store. A wide photo works best (about 1600 × 960).</p>
+    <label class="cover-pick"><input type="file" id="cFile" accept="image/*" hidden><img id="cPrev" src="img/hero.jpg" alt="Current cover"><span>Tap to choose a new photo</span></label>
+    <div class="hb"><button class="btn" id="cSave" disabled>Save cover</button><button class="btn ghost" id="cReset">Use original cover</button></div>
+    <p id="cMsg" hidden></p>
+  </div>
+  <div class="pform">
+    <h3>Category covers</h3>
+    <p class="muted">A photo for each category card on the store. Without a photo, the card shows the category name on white.</p>
+    <div class="ccovers" id="ccovers"></div>
+  </div>
+</section>
+<section id="productsTab" hidden>
+  <div class="p-bar">
+    <button class="btn" id="pNew">+ Add product</button>
+    <button class="btn ghost" id="pSeed" hidden>Import starter products</button>
+    <select id="pFilter"><option value="">All categories</option></select>
+  </div>
+  <form class="pform" id="pForm" hidden>
+    <h3 id="pFormTitle">New product</h3>
+    <div class="pf-grid">
+      <div class="pf-imgs"><div id="pThumbs" class="thumbs"></div><label class="addimg" id="pAddImg"><input type="file" id="pFile" accept="image/*" multiple hidden>+ Add photos</label><small class="muted">Up to 5 photos. The first one is the main photo.</small></div>
+      <div class="pf-fields">
+        <label>Name<input id="pName" required maxlength="80"></label>
+        <div class="row2">
+          <label>Season<select id="pSeason"><option value="summer">Summer</option><option value="winter">Winter</option></select></label>
+          <label>Category<select id="pCat"></select></label>
+        </div>
+        <label>Also show in <small>(optional · tick more categories)</small><div class="alsopick" id="pAlso"></div></label>
+        <div class="row2">
+          <label>Price ₪<input id="pPrice" type="number" min="0" step="1" required></label>
+          <label>Sale price ₪ <small>(optional)</small><input id="pSale" type="number" min="0" step="1"></label>
+        </div>
+        <label>Sizes <small>tap to add · tap again to mark sold out · tap again to remove</small><div class="szpick" id="pSizes"></div></label>
+        <label>Colors <small>(comma separated)</small><input id="pColors" placeholder="Black, White"></label>
+        <label class="chk"><input type="checkbox" id="pHidden"> Hide from store</label>
+      </div>
+    </div>
+    <div class="hb"><button class="btn">Save product</button><button type="button" class="btn ghost" id="pCancel">Cancel</button></div>
+    <p id="pMsg" hidden></p>
+  </form>
+  <div id="plist" class="plist"></div>
+</section>
+  </main>
+</div>
+
+<script src="js/config.js?v=38"></script>
+<script type="module" src="js/admin.js?v=38"></script>
+</body></html>

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MS Brand · Product</title><meta name="robots" content="noindex">
+<style>
+body{margin:0;background:#f7f7f3;color:#141414;font:15px/1.6 system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;padding:16px;box-sizing:border-box}
+.c{max-width:420px;width:100%;display:grid;gap:12px;text-align:center}
+img{width:100%;height:auto;background:#efefea;display:block}
+b{font-weight:500}.m{color:#8a8a84;font-size:.9rem}
+</style></head><body>
+<div class="c" id="c"><p class="m">Loading…</p></div>
+<script src="js/config.js?v=38"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-lite.js";
+const db = getFirestore(initializeApp(window.MS_CONFIG.firebase));
+const id = new URLSearchParams(location.search).get("id"), c = document.getElementById("c");
+const esc = t => String(t ?? "").replace(/[&<>"]/g, x => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[x]));
+try { const s = await getDoc(doc(db, "products", id)); if (!s.exists()) throw 0; const p = s.data();
+  c.innerHTML = `${(p.images?.length ? p.images : p.image ? [p.image] : []).map(u => `<img src="${esc(u)}" alt="">`).join("")}<b>${esc(p.name)}</b><span class="m">${esc(p.colors || "")}</span>`;
+} catch { c.innerHTML = `<p class="m">Product not found.</p>`; }
+</script></body></html>

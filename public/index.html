@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MS Brand Clothing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Jost:wght@300&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Tajawal:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="css/style.css?v=38">
+<link rel="icon" href="img/logo.png">
+<link rel="preconnect" href="https://firestore.googleapis.com" crossorigin><link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+</head><body>
+
+
+<div id="intro" aria-hidden="true"><div class="word"><div class="ln"><span style="animation-delay:0.30s">M</span><span style="animation-delay:0.37s">S</span><span style="animation-delay:0.44s">&nbsp;</span><span style="animation-delay:0.51s">B</span><span style="animation-delay:0.58s">R</span><span style="animation-delay:0.65s">A</span><span style="animation-delay:0.72s">N</span><span style="animation-delay:0.79s">D</span></div><div class="ln"><span style="animation-delay:0.85s">C</span><span style="animation-delay:0.92s">L</span><span style="animation-delay:0.99s">O</span><span style="animation-delay:1.06s">T</span><span style="animation-delay:1.13s">H</span><span style="animation-delay:1.20s">I</span><span style="animation-delay:1.27s">N</span><span style="animation-delay:1.34s">G</span></div></div><i></i></div>
+
+<header><div class="wrap">
+<a href="#top"><img class="logo" src="img/logo.png" alt="MS Brand Clothing"></a>
+<button id="catBtn" class="catbtn" aria-label="Categories" aria-expanded="false" aria-controls="menu"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+<button id="cartBtn" class="catbtn cartbtn" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><em id="cnt" hidden>0</em></button>
+</div></header>
+<div id="menu" class="menu" hidden><div class="mbox"><button class="mclose" id="mclose" aria-label="סגור">✕</button><div id="mlist"></div></div></div>
+<button id="toTop" class="totop" aria-label="Back to top" hidden><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+
+<main id="top">
+<section class="hero2">
+<img src="img/hero.jpg" alt="MS Brand new collection" width="1619" height="971">
+<a class="hs" style="left:5.4%;top:81.9%;width:12.5%;height:6.3%" href="#summer" aria-label="Shop now"></a><a class="hs" style="left:20.5%;top:82.5%;width:10.6%;height:5%" href="#summer" aria-label="Explore new in"></a>
+</section>
+
+<div class="marq" aria-hidden="true"><div><span>SUMMER</span><i>✦</i><span>Dresses · Sets · Tops · Denim · Trousers</span><i>✦</i><span>WINTER</span><i>✦</i><span>Jackets · Blazers · Knitwear · Sets</span><i>✦</i><span>SUMMER</span><i>✦</i><span>Dresses · Sets · Tops · Denim · Trousers</span><i>✦</i><span>WINTER</span><i>✦</i><span>Jackets · Blazers · Knitwear · Sets</span><i>✦</i><span>SUMMER</span><i>✦</i><span>Dresses · Sets · Tops · Denim · Trousers</span><i>✦</i><span>WINTER</span><i>✦</i><span>Jackets · Blazers · Knitwear · Sets</span><i>✦</i><span>SUMMER</span><i>✦</i><span>Dresses · Sets · Tops · Denim · Trousers</span><i>✦</i><span>WINTER</span><i>✦</i><span>Jackets · Blazers · Knitwear · Sets</span><i>✦</i></div></div>
+<div class="wrap shop">
+<div id="filterbar" class="filterbar" hidden><button id="showAll">← All categories</button><span id="ftitle"></span></div>
+<div id="cols"></div>
+<section id="catView" class="catview" hidden>
+<div class="cv-head"><button id="cvBack" class="cv-back">← Back</button><div><span class="tag" id="cvSeason"></span><h2 id="cvTitle"></h2></div></div>
+<div id="pgrid" class="pgrid"></div>
+</section>
+</div>
+
+<section class="wrap visit" id="location">
+<div class="fl">MS BRAND CLOTHING</div>
+<div class="ic big">ICONS</div>
+</section>
+</main>
+
+<div id="addM" class="modal" hidden><form class="sheet" id="addF">
+<button type="button" class="x" data-close>✕</button>
+<div id="aImgs" class="a-sl" hidden></div><span class="tag" id="aS"></span><h3 id="aN"></h3><div id="aP" class="a-price" hidden></div>
+<label>Size<div class="chips" id="sizes"></div></label>
+<div id="aColWrap" hidden><label>Color<div class="chips" id="aCols"></div></label></div>
+<label for="aC" id="aCLab">Color / note</label><input id="aC" placeholder="e.g. Black">
+<label>Quantity<div class="qty"><button type="button" id="qm">−</button><output id="qv">1</output><button type="button" id="qp">+</button></div></label>
+<button class="primary" type="submit">Add to bag</button>
+</form></div>
+
+<div id="cartM" class="modal side" hidden><div class="sheet drawer">
+<button type="button" class="x" data-close>✕</button>
+<h3 class="dh">Your bag</h3>
+<div id="items"></div>
+<div class="fee" id="subRow" hidden><span>Subtotal</span><b id="subV"></b></div>
+<p id="empty" class="muted">Your bag is empty. Choose a piece from the collection.</p>
+<form id="coF" hidden>
+<h4 class="dh2">Order details</h4>
+<label for="fN">Full name</label><input id="fN" required>
+<label for="fT">Town / city</label><input id="fT" required>
+<label for="fP">Phone number</label><input id="fP" type="tel" inputmode="tel" required pattern="[0-9\-\s+]{9,}">
+<label>Payment method</label><div class="chips" id="pay"><label><input type="radio" name="pay" value="bit" required>bit</label><label><input type="radio" name="pay" value="מזומן">מזומן</label><label><input type="radio" name="pay" value="העברה בנקאית">העברה בנקאית</label><label><input type="radio" name="pay" value="ויזה">ויזה</label></div>
+<p class="paynote" id="payNote" hidden>We'll contact you on WhatsApp to complete the payment.</p>
+<label>Delivery area</label><div class="chips col" id="area"><label><input type="radio" name="area" value="North" data-fee="40" required>North<span>₪40</span></label><label><input type="radio" name="area" value="Center & Triangle" data-fee="50">Center & Triangle<span>₪50</span></label><label><input type="radio" name="area" value="Daburiyya / Shibli" data-fee="0">Daburiyya / Shibli<span>Free</span></label></div>
+<div id="local" hidden><label>Pickup or delivery</label><div class="chips"><label><input type="radio" name="dl" value="Store pickup">Store pickup</label><label><input type="radio" name="dl" value="Delivery">Delivery</label></div></div>
+<div class="fee"><span>Delivery fee</span><b id="feeV">—</b></div>
+<div class="fee total" id="totRow" hidden><span>Total</span><b id="totV">—</b></div>
+<p id="err" class="err" hidden></p>
+<button class="primary" type="submit">Send order via WhatsApp</button>
+</form>
+</div></div>
+<div id="toast" class="toast" hidden></div>
+<footer><div class="wrap">© 2026 MS Brand Clothing</div></footer>
+
+<script src="js/config.js?v=38"></script>
+<script src="js/app.js?v=38"></script>
+
+<script type="module" src="js/seed-load.js?v=38"></script>
+<script type="module" src="js/order.js?v=38"></script>
+</body></html>

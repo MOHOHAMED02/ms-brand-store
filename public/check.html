@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MS Brand · Check</title><meta name="robots" content="noindex">
+<style>
+body{margin:0;background:#f7f7f3;color:#141414;font:14px/1.5 system-ui,sans-serif;padding:16px}
+h1{font-size:1.2rem;margin:0 0 4px}.m{color:#777}
+.box{background:#fff;border:1px solid #e3e1da;padding:12px;margin:12px 0}
+.ok{color:#1d7a3a}.bad{color:#b3261e;font-weight:600}.warn{color:#a15c00}
+table{border-collapse:collapse;width:100%;font-size:12px}td{border-top:1px solid #eee;padding:4px 2px;vertical-align:top}
+</style></head><body>
+<h1>Website check</h1><div class="m" id="t">Checking… (read only, nothing is changed)</div>
+<div id="out"></div>
+<script src="js/config.js?v=38"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-lite.js";
+const db = getFirestore(initializeApp(window.MS_CONFIG.firebase));
+const out = document.getElementById("out"), esc = t => String(t ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const kb = n => Math.round(n / 1024) + " KB", box = h => out.insertAdjacentHTML("beforeend", `<div class="box">${h}</div>`);
+const size = o => JSON.stringify(o).length;
+const t0 = performance.now();
+try {
+  const [ps, cs, cat, site] = await Promise.all([getDocs(collection(db, "products")), getDocs(collection(db, "covers")),
+    getDoc(doc(db, "settings", "categories")), getDoc(doc(db, "settings", "site"))]);
+  const secs = ((performance.now() - t0) / 1000).toFixed(1);
+  const C = cat.exists() ? cat.data() : null, P = ps.docs.map(d => ({ id: d.id, ...d.data() })), V = {};
+  cs.docs.forEach(d => V[d.id] = d.data().image || "");
+  const total = P.reduce((a, p) => a + size(p), 0) + Object.values(V).reduce((a, v) => a + v.length, 0) + (site.exists() ? size(site.data()) : 0);
+  const problems = [];
+  const keys = new Set(); if (C) for (const s of ["summer", "winter"]) (C[s] || []).forEach(c => keys.add(s + "|" + c.id));
+  if (!C) problems.push("No categories saved in admin (store uses the built-in list).");
+  for (const p of P) {
+    const k = p.season + "|" + p.category, imgs = p.images?.length ? p.images : p.image ? [p.image] : [];
+    if (!p.name) problems.push(`Piece ${p.id}: no name`);
+    if (C && !keys.has(k)) problems.push(`"${p.name}": its category (${k}) doesn't exist anymore → not shown`);
+    if (!(p.price > 0)) problems.push(`"${p.name}": no price → not shown`);
+    if (!imgs.length) problems.push(`"${p.name}": no photo`);
+    if (!(p.sizes || []).length) problems.push(`"${p.name}": no sizes`);
+    if (size(p) > 900000) problems.push(`"${p.name}": very heavy (${kb(size(p))})`);
+    (p.also || []).forEach(a => { if (C && !keys.has(a)) problems.push(`"${p.name}": extra category ${a} doesn't exist`); });
+  }
+  for (const [id, v] of Object.entries(V)) if (v.length > 250000) problems.push(`Category photo ${id} is heavy (${kb(v.length)}) → open admin once to shrink it`);
+  const shown = P.filter(p => !p.hidden && p.price > 0 && (!C || keys.has(p.season + "|" + p.category)));
+  box(`<b>Connection:</b> <span class="ok">OK</span> · loaded in ${secs}s<br><b>Total data:</b> ${(total / 1048576).toFixed(1)} MB
+    ${total > 8 * 1048576 ? '<span class="warn"> (heavy for weak internet)</span>' : '<span class="ok"> (fine)</span>'}<br>
+    <b>Pieces in admin:</b> ${P.length} · shown in store: ${shown.length} · hidden: ${P.filter(p => p.hidden).length}<br>
+    <b>Category photos:</b> ${Object.keys(V).length}<br><b>This phone:</b> ${esc(navigator.userAgent.match(/Instagram|FBAN|WhatsApp|CriOS|Chrome|Safari|Firefox/)?.[0] || "?")}`);
+  box(`<b>Problems found: ${problems.length ? `<span class="bad">${problems.length}</span>` : '<span class="ok">0 ✓</span>'}</b>${problems.length ? "<ul>" + problems.map(x => `<li>${esc(x)}</li>`).join("") + "</ul>" : ""}`);
+  if (C) box("<b>Pieces per category</b><table>" + ["summer", "winter"].flatMap(s => (C[s] || []).map(c => {
+    const n = shown.filter(p => (p.season === s && p.category === c.id) || (p.also || []).includes(s + "|" + c.id)).length;
+    return `<tr><td>${s === "summer" ? "Summer" : "Winter"} · ${esc(c.label)}</td><td>${n}</td><td>${V[s + "-" + c.id] ? "photo ✓ " + kb(V[s + "-" + c.id].length) : '<span class="m">auto photo</span>'}</td></tr>`; })).join("") + "</table>");
+  document.getElementById("t").textContent = "Done. Take a screenshot of this page and send it.";
+} catch (e) {
+  box(`<span class="bad">Couldn't reach the database:</span> ${esc(e.code || "")} ${esc(e.message)}`);
+  document.getElementById("t").textContent = "Take a screenshot of this page and send it.";
+}
+</script></body></html>
